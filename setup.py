@@ -3,9 +3,13 @@ import setuptools
 #with open("README.md", "r") as fh:
     #long_description = fh.read()
 setuptools.setup(
-     name='mindpoweredlogic-persistence',
-     version='0.0.9',
-     description="persistence",
+     name='mindpowered-persistence',
+     version='0.0.10',
+     author="Mind Powered Corporation",
+     author_email="support@mindpowered.dev",
+     license="CPAL-1.0",
+     url="https://mindpowered.dev/",
+     description="Persistence",
      #long_description=long_description,
      #long_description_content_type="text/markdown",
      py_modules=['persistence'],

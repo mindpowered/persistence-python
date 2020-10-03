@@ -1,6 +1,6 @@
 class Persistence:
 	"""
-	This is a class
+	Persistence
 	"""
 
 	def AddMutator():

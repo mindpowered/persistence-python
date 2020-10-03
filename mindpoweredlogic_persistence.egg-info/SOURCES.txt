@@ -1,6 +1,0 @@
-persistence.py
-setup.py
-mindpoweredlogic_persistence.egg-info/PKG-INFO
-mindpoweredlogic_persistence.egg-info/SOURCES.txt
-mindpoweredlogic_persistence.egg-info/dependency_links.txt
-mindpoweredlogic_persistence.egg-info/top_level.txt
