@@ -5139,7 +5139,9 @@ class persistence_Persistence:
             recordType = (args[0] if 0 < len(args) else None)
             operationName = (args[1] if 1 < len(args) else None)
             strategyMethod = (args[2] if 2 < len(args) else None)
-            updateMapper = (args[3] if 3 < len(args) else None)
+            updateMapper = None
+            if (len(args) > 3):
+                updateMapper = (args[3] if 3 < len(args) else None)
             _gthis.addMutator(recordType,operationName,strategyMethod,updateMapper)
             return True
         self.maglev.register("Persistence.AddMutator",_hx_local_0)
@@ -5147,8 +5149,12 @@ class persistence_Persistence:
             recordType = (args[0] if 0 < len(args) else None)
             operationName = (args[1] if 1 < len(args) else None)
             strategyMethod = (args[2] if 2 < len(args) else None)
-            queryMapper = (args[3] if 3 < len(args) else None)
-            resultMapper = (args[4] if 4 < len(args) else None)
+            queryMapper = None
+            if (len(args) > 4):
+                queryMapper = (args[3] if 3 < len(args) else None)
+            resultMapper = None
+            if (len(args) > 5):
+                resultMapper = (args[4] if 4 < len(args) else None)
             _gthis.addGetter(recordType,operationName,strategyMethod,queryMapper,resultMapper)
             return True
         self.maglev.register("Persistence.AddGetter",_hx_local_1)
