@@ -5153,14 +5153,14 @@ class persistence_Persistence:
             operationName = (args[1] if 1 < len(args) else None)
             strategyMethod = (args[2] if 2 < len(args) else None)
             queryMapper = None
-            if (len(args) > 4):
+            if (len(args) >= 4):
                 queryMapper = (args[3] if 3 < len(args) else None)
             resultMapper = None
-            if (len(args) > 5):
+            if (len(args) >= 5):
                 resultMapper = (args[4] if 4 < len(args) else None)
             useQueryValuesAsParams = None
-            if (len(args) > 6):
-                resultMapper = (args[5] if 5 < len(args) else None)
+            if (len(args) >= 6):
+                useQueryValuesAsParams = (args[5] if 5 < len(args) else None)
             _gthis.addGetter(recordType,operationName,strategyMethod,queryMapper,resultMapper,useQueryValuesAsParams)
             return True
         self.maglev.register("Persistence.AddGetter",_hx_local_1)
