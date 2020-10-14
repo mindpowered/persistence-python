@@ -5142,7 +5142,10 @@ class persistence_Persistence:
             updateMapper = None
             if (len(args) > 3):
                 updateMapper = (args[3] if 3 < len(args) else None)
-            _gthis.addMutator(recordType,operationName,strategyMethod,updateMapper)
+            useRecordDataAsParams = None
+            if (len(args) > 4):
+                useRecordDataAsParams = (args[4] if 4 < len(args) else None)
+            _gthis.addMutator(recordType,operationName,strategyMethod,updateMapper,useRecordDataAsParams)
             return True
         self.maglev.register("Persistence.AddMutator",_hx_local_0)
         def _hx_local_1(args):
@@ -5155,7 +5158,10 @@ class persistence_Persistence:
             resultMapper = None
             if (len(args) > 5):
                 resultMapper = (args[4] if 4 < len(args) else None)
-            _gthis.addGetter(recordType,operationName,strategyMethod,queryMapper,resultMapper)
+            useQueryValuesAsParams = None
+            if (len(args) > 6):
+                resultMapper = (args[5] if 5 < len(args) else None)
+            _gthis.addGetter(recordType,operationName,strategyMethod,queryMapper,resultMapper,useQueryValuesAsParams)
             return True
         self.maglev.register("Persistence.AddGetter",_hx_local_1)
         def _hx_local_2(args):
@@ -5172,15 +5178,19 @@ class persistence_Persistence:
             return _gthis.get(recordType,operationName,queryValues)
         self.maglev.register("Persistence.Get",_hx_local_3)
 
-    def addMutator(self,recordType,operationName,strategyMethod,updateMapper = None):
+    def addMutator(self,recordType,operationName,strategyMethod,updateMapper = None,useRecordDataAsParams = None):
         if (updateMapper is None):
             def _hx_local_0(v):
                 return v
             updateMapper = _hx_local_0
-        mutator = persistence__Persistence_Mutator(recordType,strategyMethod,updateMapper)
-        self.mutators.h[((("null" if recordType is None else recordType) + ".") + ("null" if operationName is None else operationName))] = mutator
+        if (useRecordDataAsParams is None):
+            useRecordDataAsParams = False
+        mutator = persistence__Persistence_Mutator(recordType,strategyMethod,updateMapper,useRecordDataAsParams)
+        this1 = self.mutators
+        k = self.calcKey(recordType,operationName)
+        this1.h[k] = mutator
 
-    def addGetter(self,recordType,operationName,strategyMethod,queryMapper = None,resultMapper = None):
+    def addGetter(self,recordType,operationName,strategyMethod,queryMapper = None,resultMapper = None,useQueryValuesAsParams = None):
         if (queryMapper is None):
             def _hx_local_0(v):
                 return v
@@ -5189,7 +5199,9 @@ class persistence_Persistence:
             def _hx_local_1(v):
                 return v
             resultMapper = _hx_local_1
-        getter = persistence__Persistence_Getter(recordType,strategyMethod,queryMapper,resultMapper)
+        if (useQueryValuesAsParams is None):
+            useQueryValuesAsParams = False
+        getter = persistence__Persistence_Getter(recordType,strategyMethod,queryMapper,resultMapper,useQueryValuesAsParams)
         this1 = self.getters
         k = self.calcKey(recordType,operationName)
         this1.h[k] = getter
@@ -5206,7 +5218,7 @@ class persistence_Persistence:
                 params = updateMapper(recordData)
             elif Std.isOfType(mutator.updateMapper,str):
                 updateMapper = mutator.updateMapper
-                params = self.maglev.call(updateMapper,recordData)
+                params = self.maglev.call(updateMapper,[recordData])
             else:
                 raise haxe_Exception.thrown("updateMapper must be a string or function")
             raw_result = None
@@ -5215,7 +5227,10 @@ class persistence_Persistence:
                 raw_result = strategyMethod(params)
             elif Std.isOfType(mutator.strategyMethod,str):
                 strategyMethod = mutator.strategyMethod
-                raw_result = self.maglev.call(strategyMethod,params)
+                if mutator.useRecordDataAsParams:
+                    raw_result = self.maglev.call(strategyMethod,params)
+                else:
+                    raw_result = self.maglev.call(strategyMethod,[params])
             else:
                 raise haxe_Exception.thrown("strategyMethod must be a string or function")
         else:
@@ -5233,7 +5248,7 @@ class persistence_Persistence:
                 query = queryMapper(queryValues)
             elif Std.isOfType(getter.queryMapper,str):
                 queryMapper = getter.queryMapper
-                query = self.maglev.call(queryMapper,queryValues)
+                query = self.maglev.call(queryMapper,[queryValues])
             else:
                 raise haxe_Exception.thrown("queryMapper must be a string or function")
             raw_result = None
@@ -5242,7 +5257,10 @@ class persistence_Persistence:
                 raw_result = strategyMethod(query)
             elif Std.isOfType(getter.strategyMethod,str):
                 strategyMethod = getter.strategyMethod
-                raw_result = self.maglev.call(getter.strategyMethod,query)
+                if getter.useQueryValuesAsParams:
+                    raw_result = self.maglev.call(getter.strategyMethod,query)
+                else:
+                    raw_result = self.maglev.call(getter.strategyMethod,[query])
             else:
                 raise haxe_Exception.thrown("strategyMethod must be a string or function")
             result = None
@@ -5251,7 +5269,7 @@ class persistence_Persistence:
                 result = resultMapper(raw_result)
             elif Std.isOfType(getter.resultMapper,str):
                 resultMapper = getter.resultMapper
-                result = self.maglev.call(resultMapper,raw_result)
+                result = self.maglev.call(resultMapper,[raw_result])
             else:
                 raise haxe_Exception.thrown("resultMapper must be a string or function")
             return result
@@ -5270,11 +5288,11 @@ class persistence_Persistence:
 
 class persistence__Persistence_Mutator:
     _hx_class_name = "persistence._Persistence.Mutator"
-    __slots__ = ("recordType", "strategyMethod", "updateMapper")
-    _hx_fields = ["recordType", "strategyMethod", "updateMapper"]
+    __slots__ = ("recordType", "strategyMethod", "updateMapper", "useRecordDataAsParams")
+    _hx_fields = ["recordType", "strategyMethod", "updateMapper", "useRecordDataAsParams"]
     _hx_statics = ["__meta__"]
 
-    def __init__(self,recordType,strategyMethod,updateMapper):
+    def __init__(self,recordType,strategyMethod,updateMapper,useRecordDataAsParams):
         if ((not Std.isOfType(strategyMethod,str)) and (not Reflect.isFunction(strategyMethod))):
             raise haxe_Exception.thrown("strategyMethod must be a string or function")
         if ((not Std.isOfType(updateMapper,str)) and (not Reflect.isFunction(updateMapper))):
@@ -5282,21 +5300,23 @@ class persistence__Persistence_Mutator:
         self.recordType = recordType
         self.strategyMethod = strategyMethod
         self.updateMapper = updateMapper
+        self.useRecordDataAsParams = useRecordDataAsParams
 
     @staticmethod
     def _hx_empty_init(_hx_o):
         _hx_o.recordType = None
         _hx_o.strategyMethod = None
         _hx_o.updateMapper = None
+        _hx_o.useRecordDataAsParams = None
 
 
 class persistence__Persistence_Getter:
     _hx_class_name = "persistence._Persistence.Getter"
-    __slots__ = ("recordType", "strategyMethod", "queryMapper", "resultMapper")
-    _hx_fields = ["recordType", "strategyMethod", "queryMapper", "resultMapper"]
+    __slots__ = ("recordType", "strategyMethod", "queryMapper", "resultMapper", "useQueryValuesAsParams")
+    _hx_fields = ["recordType", "strategyMethod", "queryMapper", "resultMapper", "useQueryValuesAsParams"]
     _hx_statics = ["__meta__"]
 
-    def __init__(self,recordType,strategyMethod,queryMapper,resultMapper):
+    def __init__(self,recordType,strategyMethod,queryMapper,resultMapper,useQueryValuesAsParams):
         if ((not Std.isOfType(strategyMethod,str)) and (not Reflect.isFunction(strategyMethod))):
             raise haxe_Exception.thrown("strategyMethod must be a string or function")
         if ((not Std.isOfType(queryMapper,str)) and (not Reflect.isFunction(queryMapper))):
@@ -5307,6 +5327,7 @@ class persistence__Persistence_Getter:
         self.strategyMethod = strategyMethod
         self.queryMapper = queryMapper
         self.resultMapper = resultMapper
+        self.useQueryValuesAsParams = useQueryValuesAsParams
 
     @staticmethod
     def _hx_empty_init(_hx_o):
@@ -5314,6 +5335,7 @@ class persistence__Persistence_Getter:
         _hx_o.strategyMethod = None
         _hx_o.queryMapper = None
         _hx_o.resultMapper = None
+        _hx_o.useQueryValuesAsParams = None
 
 
 class python_Boot:
