@@ -4,7 +4,7 @@ import setuptools
     #long_description = fh.read()
 setuptools.setup(
      name='mindpowered-persistence',
-     version='0.0.17',
+     version='0.0.18',
      author="Mind Powered Corporation",
      author_email="support@mindpowered.dev",
      license="CPAL-1.0",
