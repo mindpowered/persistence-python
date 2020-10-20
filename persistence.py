@@ -8,7 +8,7 @@ from os import path as python_lib_os_Path
 import inspect as python_lib_Inspect
 import os as python_lib_Os
 from maglev import maglev_MagLev
-from maglev import maglev_MagLevType as maglev__MagLev_MagLevType_Impl_
+from maglev import maglev__MagLev_MagLevType_Impl_
 from maglev import maglev_MagLevResult
 from maglev import maglev_MagLevError
 from maglev import maglev_MagLevAny
