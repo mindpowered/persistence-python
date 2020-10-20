@@ -8,7 +8,6 @@ from os import path as python_lib_os_Path
 import inspect as python_lib_Inspect
 import os as python_lib_Os
 from maglev import maglev_MagLev
-from maglev import maglev__MagLev_MagLevType_Impl_
 from maglev import maglev_MagLevResult
 from maglev import maglev_MagLevError
 from maglev import maglev_MagLevAny
@@ -5459,9 +5458,9 @@ class persistence_Persistence:
         return ((("null" if recordType is None else recordType) + ".") + ("null" if operationName is None else operationName))
 
     def convertToHaxe(self,x):
-        if (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_Null):
+        if (x.getType() == maglev_MagLevNull.getStaticType()):
             return None
-        elif (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_Boolean):
+        elif (x.getType() == maglev_MagLevBoolean.getStaticType()):
             def _hx_local_1():
                 _hx_local_0 = x
                 if (Std.isOfType(_hx_local_0,maglev_MagLevBoolean) or ((_hx_local_0 is None))):
@@ -5471,7 +5470,7 @@ class persistence_Persistence:
                 return _hx_local_0
             y = _hx_local_1()
             return y.getBool()
-        elif (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_String):
+        elif (x.getType() == maglev_MagLevString.getStaticType()):
             def _hx_local_3():
                 _hx_local_2 = x
                 if (Std.isOfType(_hx_local_2,maglev_MagLevString) or ((_hx_local_2 is None))):
@@ -5481,7 +5480,7 @@ class persistence_Persistence:
                 return _hx_local_2
             y = _hx_local_3()
             return y.getString()
-        elif (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_Number):
+        elif (x.getType() == maglev_MagLevNumber.getStaticType()):
             def _hx_local_5():
                 _hx_local_4 = x
                 if (Std.isOfType(_hx_local_4,maglev_MagLevNumber) or ((_hx_local_4 is None))):
@@ -5491,7 +5490,7 @@ class persistence_Persistence:
                 return _hx_local_4
             y = _hx_local_5()
             return y.getFloat()
-        elif (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_Array):
+        elif (x.getType() == maglev_MagLevArray.getStaticType()):
             def _hx_local_7():
                 _hx_local_6 = x
                 if (Std.isOfType(_hx_local_6,maglev_MagLevArray) or ((_hx_local_6 is None))):
@@ -5507,7 +5506,7 @@ class persistence_Persistence:
                 arr.append(x1)
                 i = (i + 1)
             return arr
-        elif (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_Object):
+        elif (x.getType() == maglev_MagLevObject.getStaticType()):
             def _hx_local_10():
                 _hx_local_9 = x
                 if (Std.isOfType(_hx_local_9,maglev_MagLevObject) or ((_hx_local_9 is None))):
