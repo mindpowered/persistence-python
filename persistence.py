@@ -8,7 +8,7 @@ from os import path as python_lib_os_Path
 import inspect as python_lib_Inspect
 import os as python_lib_Os
 from maglev import maglev_MagLev
-from maglev import maglev_MagLevType
+from maglev import maglev_MagLevType as maglev__MagLev_MagLevType_Impl_
 from maglev import maglev_MagLevResult
 from maglev import maglev_MagLevError
 from maglev import maglev_MagLevAny
@@ -5420,7 +5420,8 @@ class persistence_Persistence:
                         else:
                             raise "Class cast error"
                         return _hx_local_2
-                    raw_result = self.maglev.call(getter.strategyMethod,_hx_local_3())
+                    raw_result_result = self.maglev.call(getter.strategyMethod,_hx_local_3())
+                    raw_result = self.convertToHaxe(raw_result_result.getResult())
                 else:
                     def _hx_local_5():
                         _hx_local_4 = self.convertToMagLev([query])
@@ -5430,6 +5431,8 @@ class persistence_Persistence:
                             raise "Class cast error"
                         return _hx_local_4
                     raw_result = self.maglev.call(getter.strategyMethod,_hx_local_5())
+                    raw_result_result = raw_result
+                    raw_result = self.convertToHaxe(raw_result_result.getResult())
             else:
                 raise haxe_Exception.thrown("strategyMethod must be a string or function")
             result = None
@@ -5456,9 +5459,9 @@ class persistence_Persistence:
         return ((("null" if recordType is None else recordType) + ".") + ("null" if operationName is None else operationName))
 
     def convertToHaxe(self,x):
-        if (x.getType() == maglev_MagLevType.MagLevType_Null):
+        if (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_Null):
             return None
-        elif (x.getType() == maglev_MagLevType.MagLevType_Boolean):
+        elif (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_Boolean):
             def _hx_local_1():
                 _hx_local_0 = x
                 if (Std.isOfType(_hx_local_0,maglev_MagLevBoolean) or ((_hx_local_0 is None))):
@@ -5468,7 +5471,7 @@ class persistence_Persistence:
                 return _hx_local_0
             y = _hx_local_1()
             return y.getBool()
-        elif (x.getType() == maglev_MagLevType.MagLevType_String):
+        elif (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_String):
             def _hx_local_3():
                 _hx_local_2 = x
                 if (Std.isOfType(_hx_local_2,maglev_MagLevString) or ((_hx_local_2 is None))):
@@ -5478,7 +5481,7 @@ class persistence_Persistence:
                 return _hx_local_2
             y = _hx_local_3()
             return y.getString()
-        elif (x.getType() == maglev_MagLevType.MagLevType_Number):
+        elif (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_Number):
             def _hx_local_5():
                 _hx_local_4 = x
                 if (Std.isOfType(_hx_local_4,maglev_MagLevNumber) or ((_hx_local_4 is None))):
@@ -5488,7 +5491,7 @@ class persistence_Persistence:
                 return _hx_local_4
             y = _hx_local_5()
             return y.getFloat()
-        elif (x.getType() == maglev_MagLevType.MagLevType_Array):
+        elif (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_Array):
             def _hx_local_7():
                 _hx_local_6 = x
                 if (Std.isOfType(_hx_local_6,maglev_MagLevArray) or ((_hx_local_6 is None))):
@@ -5500,11 +5503,11 @@ class persistence_Persistence:
             arr = list()
             i = 0
             while (i < y.size()):
-                x1 = y.get(i)
+                x1 = self.convertToHaxe(y.get(i))
                 arr.append(x1)
                 i = (i + 1)
             return arr
-        elif (x.getType() == maglev_MagLevType.MagLevType_Object):
+        elif (x.getType() == maglev__MagLev_MagLevType_Impl_.MagLevType_Object):
             def _hx_local_10():
                 _hx_local_9 = x
                 if (Std.isOfType(_hx_local_9,maglev_MagLevObject) or ((_hx_local_9 is None))):
@@ -5525,7 +5528,7 @@ class persistence_Persistence:
                         raise "Class cast error"
                     return _hx_local_11
                 key = (_hx_local_12()).getString()
-                value = y.get(key)
+                value = self.convertToHaxe(y.get(key))
                 _hx_map.h[key] = value
                 i = (i + 1)
             return _hx_map
