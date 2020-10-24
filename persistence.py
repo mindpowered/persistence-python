@@ -5458,6 +5458,7 @@ class persistence_Persistence:
         return ((("null" if recordType is None else recordType) + ".") + ("null" if operationName is None else operationName))
 
     def convertToHaxe(self,x):
+        _gthis = self
         if (x.getType() == maglev_MagLevNull.getStaticType()):
             return None
         elif (x.getType() == maglev_MagLevBoolean.getStaticType()):
@@ -5531,6 +5532,29 @@ class persistence_Persistence:
                 _hx_map.h[key] = value
                 i = (i + 1)
             return _hx_map
+        elif (x.getType() == maglev_MagLevFunction.getStaticType()):
+            def _hx_local_15():
+                _hx_local_14 = x
+                if (Std.isOfType(_hx_local_14,maglev_MagLevFunction) or ((_hx_local_14 is None))):
+                    _hx_local_14
+                else:
+                    raise "Class cast error"
+                return _hx_local_14
+            y = _hx_local_15()
+            def _hx_local_17(args):
+                arr = maglev_MagLevArray.create()
+                _g = 0
+                while (_g < len(args)):
+                    arg = (args[_g] if _g >= 0 and _g < len(args) else None)
+                    _g = (_g + 1)
+                    arr.push(_gthis.convertToMagLev(arg))
+                ret = y.call(arr)
+                if ret.isError():
+                    raise haxe_Exception.thrown(ret.getError().getMessage())
+                else:
+                    return ret.getResult()
+            f = _hx_local_17
+            return f
         else:
             raise haxe_Exception.thrown("convertToHaxe: unknown type")
 
