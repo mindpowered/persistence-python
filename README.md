@@ -6,21 +6,19 @@ Contents
 ========
 
 * [persistence Python Library](#persistence-python-library)
-	* [Licensing Options](#licensing-options)
-	* [Support](#support)
+* [Licensing](#licensing)
+* [Support](#support)
 
 # persistence Python Library
 
-## Licensing Options
-
-
+# Licensing
 Additional [licensing options][licensing] are available.
-## Support
 
-
-For bugfixes, please raise an issue in the [Issue Tracker][bugs].
+# Support
+For bug fixes, please raise an issue in the [Issue Tracker][bugs].
 
 For feature requests, and general support, please [Contact us][contact].
+
 
 
 [bugs]: https://github.com/mindpowered/persistence-python/issues

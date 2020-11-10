@@ -5279,8 +5279,8 @@ class persistence_Persistence:
                 return _hx_local_14
             operationName = (_hx_local_15()).getString()
             recordData = _gthis.convertToHaxe(args.get(2))
-            _gthis.mutate(recordType,operationName,recordData)
-            return maglev_MagLevResult.fromResult(maglev_MagLevBoolean.fromBool(True))
+            ret = _gthis.convertToMagLev(_gthis.mutate(recordType,operationName,recordData))
+            return maglev_MagLevResult.fromResult(ret)
         self.maglev.register("Persistence.Mutate",maglev_MagLevFunction.fromFunction(_hx_local_16))
         def _hx_local_21(args):
             def _hx_local_18():
@@ -5380,6 +5380,7 @@ class persistence_Persistence:
                     raw_result = self.maglev.call(strategyMethod,_hx_local_5())
             else:
                 raise haxe_Exception.thrown("strategyMethod must be a string or function")
+            return raw_result
         else:
             raise haxe_Exception.thrown("the specified mutator has not been added")
 
