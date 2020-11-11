@@ -5,11 +5,21 @@ persistence
 Contents
 ========
 
-* [persistence Python Library](#persistence-python-library)
+* [Requirements](#requirements)
+* [Installation](#installation)
 * [Licensing](#licensing)
 * [Support](#support)
 
-# persistence Python Library
+# Requirements
+Python 3.x. Due to security fixes and new features Python 3.7 or later is recommended.
+pip
+
+
+Third-party dependencies may have additional requirements.
+
+# Installation
+pip install ...
+
 
 # Licensing
 Additional [licensing options][licensing] are available.

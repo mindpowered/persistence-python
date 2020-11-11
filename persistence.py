@@ -5261,7 +5261,7 @@ class persistence_Persistence:
             _gthis.addGetter(recordType,operationName,strategyMethod,queryMapper,resultMapper,useQueryValuesAsParams)
             return maglev_MagLevResult.fromResult(maglev_MagLevBoolean.fromBool(True))
         self.maglev.register("Persistence.AddGetter",maglev_MagLevFunction.fromFunction(_hx_local_11))
-        def _hx_local_16(args):
+        def _hx_local_18(args):
             def _hx_local_13():
                 _hx_local_12 = args.get(0)
                 if (Std.isOfType(_hx_local_12,maglev_MagLevString) or ((_hx_local_12 is None))):
@@ -5278,31 +5278,45 @@ class persistence_Persistence:
                     raise "Class cast error"
                 return _hx_local_14
             operationName = (_hx_local_15()).getString()
-            recordData = _gthis.convertToHaxe(args.get(2))
-            ret = _gthis.convertToMagLev(_gthis.mutate(recordType,operationName,recordData))
-            return maglev_MagLevResult.fromResult(ret)
-        self.maglev.register("Persistence.Mutate",maglev_MagLevFunction.fromFunction(_hx_local_16))
-        def _hx_local_21(args):
-            def _hx_local_18():
-                _hx_local_17 = args.get(0)
-                if (Std.isOfType(_hx_local_17,maglev_MagLevString) or ((_hx_local_17 is None))):
-                    _hx_local_17
+            def _hx_local_17():
+                _hx_local_16 = args.get(2)
+                if (Std.isOfType(_hx_local_16,maglev_MagLevArray) or ((_hx_local_16 is None))):
+                    _hx_local_16
                 else:
                     raise "Class cast error"
-                return _hx_local_17
-            recordType = (_hx_local_18()).getString()
+                return _hx_local_16
+            recordData = _gthis.convertToHaxe(_hx_local_17())
+            ret = _gthis.convertToMagLev(_gthis.mutate(recordType,operationName,recordData))
+            return maglev_MagLevResult.fromResult(ret)
+        self.maglev.register("Persistence.Mutate",maglev_MagLevFunction.fromFunction(_hx_local_18))
+        def _hx_local_25(args):
             def _hx_local_20():
-                _hx_local_19 = args.get(1)
+                _hx_local_19 = args.get(0)
                 if (Std.isOfType(_hx_local_19,maglev_MagLevString) or ((_hx_local_19 is None))):
                     _hx_local_19
                 else:
                     raise "Class cast error"
                 return _hx_local_19
-            operationName = (_hx_local_20()).getString()
-            queryValues = _gthis.convertToHaxe(args.get(2))
+            recordType = (_hx_local_20()).getString()
+            def _hx_local_22():
+                _hx_local_21 = args.get(1)
+                if (Std.isOfType(_hx_local_21,maglev_MagLevString) or ((_hx_local_21 is None))):
+                    _hx_local_21
+                else:
+                    raise "Class cast error"
+                return _hx_local_21
+            operationName = (_hx_local_22()).getString()
+            def _hx_local_24():
+                _hx_local_23 = args.get(2)
+                if (Std.isOfType(_hx_local_23,maglev_MagLevArray) or ((_hx_local_23 is None))):
+                    _hx_local_23
+                else:
+                    raise "Class cast error"
+                return _hx_local_23
+            queryValues = _gthis.convertToHaxe(_hx_local_24())
             ret = _gthis.convertToMagLev(_gthis.get(recordType,operationName,queryValues))
             return maglev_MagLevResult.fromResult(ret)
-        self.maglev.register("Persistence.Get",maglev_MagLevFunction.fromFunction(_hx_local_21))
+        self.maglev.register("Persistence.Get",maglev_MagLevFunction.fromFunction(_hx_local_25))
 
     def addMutator(self,recordType,operationName,strategyMethod,updateMapper = None,useRecordDataAsParams = None):
         if (updateMapper is None):
@@ -5360,6 +5374,7 @@ class persistence_Persistence:
                 raw_result = strategyMethod(params)
             elif Std.isOfType(mutator.strategyMethod,str):
                 strategyMethod = mutator.strategyMethod
+                raw_maglev_result = None
                 if mutator.useRecordDataAsParams:
                     def _hx_local_3():
                         _hx_local_2 = self.convertToMagLev(params)
@@ -5368,7 +5383,7 @@ class persistence_Persistence:
                         else:
                             raise "Class cast error"
                         return _hx_local_2
-                    raw_result = self.maglev.call(strategyMethod,_hx_local_3())
+                    raw_maglev_result = self.maglev.call(strategyMethod,_hx_local_3())
                 else:
                     def _hx_local_5():
                         _hx_local_4 = self.convertToMagLev([params])
@@ -5377,7 +5392,10 @@ class persistence_Persistence:
                         else:
                             raise "Class cast error"
                         return _hx_local_4
-                    raw_result = self.maglev.call(strategyMethod,_hx_local_5())
+                    raw_maglev_result = self.maglev.call(strategyMethod,_hx_local_5())
+                if raw_maglev_result.isError():
+                    raise haxe_Exception.thrown(raw_maglev_result.getError().getMessage())
+                raw_result = self.convertToHaxe(raw_maglev_result.getResult())
             else:
                 raise haxe_Exception.thrown("strategyMethod must be a string or function")
             return raw_result
@@ -5412,6 +5430,7 @@ class persistence_Persistence:
                 raw_result = strategyMethod(query)
             elif Std.isOfType(getter.strategyMethod,str):
                 strategyMethod = getter.strategyMethod
+                raw_maglev_result = None
                 if getter.useQueryValuesAsParams:
                     def _hx_local_3():
                         _hx_local_2 = self.convertToMagLev(query)
@@ -5420,8 +5439,7 @@ class persistence_Persistence:
                         else:
                             raise "Class cast error"
                         return _hx_local_2
-                    raw_result_result = self.maglev.call(getter.strategyMethod,_hx_local_3())
-                    raw_result = self.convertToHaxe(raw_result_result.getResult())
+                    raw_maglev_result = self.maglev.call(getter.strategyMethod,_hx_local_3())
                 else:
                     def _hx_local_5():
                         _hx_local_4 = self.convertToMagLev([query])
@@ -5430,9 +5448,10 @@ class persistence_Persistence:
                         else:
                             raise "Class cast error"
                         return _hx_local_4
-                    raw_result = self.maglev.call(getter.strategyMethod,_hx_local_5())
-                    raw_result_result = raw_result
-                    raw_result = self.convertToHaxe(raw_result_result.getResult())
+                    raw_maglev_result = self.maglev.call(getter.strategyMethod,_hx_local_5())
+                if raw_maglev_result.isError():
+                    raise haxe_Exception.thrown(raw_maglev_result.getError().getMessage())
+                raw_result = self.convertToHaxe(raw_maglev_result.getResult())
             else:
                 raise haxe_Exception.thrown("strategyMethod must be a string or function")
             result = None
@@ -5448,7 +5467,10 @@ class persistence_Persistence:
                     else:
                         raise "Class cast error"
                     return _hx_local_6
-                result = self.maglev.call(resultMapper,_hx_local_7())
+                maglev_result = self.maglev.call(resultMapper,_hx_local_7())
+                if maglev_result.isError():
+                    raise haxe_Exception.thrown(maglev_result.getError().getMessage())
+                result = self.convertToHaxe(maglev_result.getResult())
             else:
                 raise haxe_Exception.thrown("resultMapper must be a string or function")
             return result
