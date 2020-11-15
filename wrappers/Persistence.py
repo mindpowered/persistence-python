@@ -1,7 +1,7 @@
 import maglev
 import persistence
 
-from typing import Any, List
+from typing import Any, List, Callable
 
 class Persistence:
 	"""
