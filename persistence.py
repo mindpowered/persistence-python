@@ -5671,7 +5671,7 @@ class persistence_Persistence:
         raw_result = None
         if Reflect.isFunction(getter.strategyMethod):
             strategyMethod = getter.strategyMethod
-            callback(strategyMethod(self.query))
+            callback(strategyMethod(queryValues))
         elif Std.isOfType(getter.strategyMethod,str):
             strategyMethod = getter.strategyMethod
             raw_maglev_result = None

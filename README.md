@@ -18,7 +18,14 @@ pip
 Third-party dependencies may have additional requirements.
 
 # Installation
-pip install ...
+You can retrieve the persistence package from the Python Package Index https://pypi.org/ using pip. First make sure you have python3 and python3-pip installed. Then you can start by making a `requirements.txt` file in your working directory with the persistence requirement in it. You can add any other packages to your requirements here, each as a separate line.
+
+requirements.txt:
+```
+mindpowered-persistence>0
+```
+Now you can use pip to install the persistence package: `python3 -m pip install -r requirements.txt`
+If you would like to update the package, simply run the above command again.
 
 
 # Licensing
